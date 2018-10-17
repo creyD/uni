@@ -1,2 +1,2 @@
 all:
-	gcc hello_world.c -o hello_world -std=c99
+	gcc helloworld.c -o helloworld -std=c99
