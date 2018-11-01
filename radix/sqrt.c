@@ -15,9 +15,9 @@ int main (){
 }
 
 // The iterator is called for recusively using the heron sheme
-unsigned long int iterator(unsigned long int a, unsigned long int val, unsigned long int i){
-	if (i < 100){
-		return iterator(a, 0.5*(val+a/val),i++);
+unsigned long int iterator(unsigned long int a, unsigned long int val){
+	if (val * val == a){
+		return iterator(a, 0.5*(val+a/val));
 	}
 	else{
 		return val;
@@ -31,6 +31,6 @@ unsigned long int squareroot(unsigned long int val){
 		return 0;
 	}
 	else{
-		return iterator(val, startwert, 0);
+		return iterator(val, startwert);
 	}
 }
