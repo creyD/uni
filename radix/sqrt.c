@@ -12,15 +12,20 @@ int main (){
 
 unsigned long int iterator(unsigned long int val, unsigned long int a) {
 	if (a * a == val + 1 || a * a == val - 1 || a * a == val){
-		return a;
+		return val;
 	}
 	else {
-		return iterator(0.5 * (a + val / a));
+		return iterator(a, 0.5 * (a + val / a));
 	}
 }
 
 // Heron Squareroot Function
 unsigned long int squareroot(unsigned long int val) {
-	int startwert = val + 1 / 2;
-	return iterator(val, startwert);
+	unsigned long int startwert = val + 1 / 2;
+	if (val == 0){
+		return 0
+	}
+	else {
+		return iterator(val, startwert);
+	}
 }
