@@ -14,22 +14,23 @@ int main (){
 	return 0;
 }
 
-unsigned long int iterator(unsigned long int val, unsigned long int a) {
-	if (a * a == val + 1 || a * a == val - 1 || a * a == val){
-		return val;
+// The iterator is called for recusively using the heron sheme
+unsigned long int iterator(unsigned long int a, unsigned long int val, unsigned long int i){
+	if (i < 100){
+		return iterator(a, 0.5*(val+a/val),i++);
 	}
-	else {
-		return iterator(a, 0.5 * (a + val / a));
+	else{
+		return val;
 	}
 }
 
-// Heron Squareroot Function
-unsigned long int squareroot(unsigned long int val) {
-	unsigned long int startwert = val + 1 / 2;
+// Squareroot main function
+unsigned long int squareroot(unsigned long int val){
+	unsigned long int startwert = 0.5 * (1 + val / 2);
 	if (val == 0){
 		return 0;
 	}
-	else {
-		return iterator(val, startwert);
+	else{
+		return iterator(val, startwert, 0);
 	}
 }
