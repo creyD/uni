@@ -7,7 +7,11 @@ unsigned long int squareroot(unsigned long int val);
 int printf(const char *, ...);
 
 int main (){
-	printf("Wurzel aus %lu ist %lu",(unsigned long)9, squareroot((unsigned long)9)); return 0;
+	printf("Wurzel aus %lu ist %lu\n",(unsigned long)12345, squareroot((unsigned long)12345));
+	printf("Wurzel aus %lu ist %lu\n",(unsigned long)81, squareroot((unsigned long)81));
+	printf("Wurzel aus %lu ist %lu\n",(unsigned long)0, squareroot((unsigned long)0));
+	printf("Wurzel aus %lu ist %lu\n",(unsigned long)9999, squareroot((unsigned long)9999));
+	return 0;
 }
 
 unsigned long int iterator(unsigned long int val, unsigned long int a) {
@@ -23,7 +27,7 @@ unsigned long int iterator(unsigned long int val, unsigned long int a) {
 unsigned long int squareroot(unsigned long int val) {
 	unsigned long int startwert = val + 1 / 2;
 	if (val == 0){
-		return 0
+		return 0;
 	}
 	else {
 		return iterator(val, startwert);
