@@ -1,5 +1,4 @@
 // Programm zur Wurzelberechnung nach Heron
-unsigned long int squareroot(unsigned long int val);
 
 // NO LIBARIES, LOOPS, GLOBAL VARIABLES, ONLY LONG INT
 
@@ -20,13 +19,12 @@ unsigned long int iterator(unsigned long int val, unsigned long int a){
 
 // Squareroot main function
 unsigned long int squareroot(unsigned long int val){
-	unsigned long int startwert = (1 + val) / 2;
 	if (val == 0){
 		return 0;
 	}
 	else
 	{
-		return iterator(val, startwert);
+		return iterator(val, (1 + val) / 2);
 	}
 }
 
