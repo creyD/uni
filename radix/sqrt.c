@@ -7,23 +7,26 @@ unsigned long int squareroot(unsigned long int val);
 int printf(const char *, ...);
 
 // The iterator is called for recusively using the heron sheme
-unsigned long int iterator(unsigned long int a, unsigned long int val, int i){
-	if (i == 100){
-		return iterator(a, 0.5*(val+a/val), i++);
+unsigned long int iterator(unsigned long int val, unsigned long int a){
+	a = (a+val/a)/2;
+	if (a*a <= val) {
+		return a;
 	}
-	else{
-		return val;
+	else
+	{
+		return iterator(val,a);
 	}
 }
 
 // Squareroot main function
 unsigned long int squareroot(unsigned long int val){
-	unsigned long int startwert = 0.5 * (1 + val / 2);
+	unsigned long int startwert = (1 + val) / 2;
 	if (val == 0){
 		return 0;
 	}
-	else{
-		return iterator(val, startwert, 0);
+	else
+	{
+		return iterator(val, startwert);
 	}
 }
 
@@ -32,5 +35,6 @@ int main (){
 	printf("Wurzel aus %lu ist %lu\n",(unsigned long)81, squareroot((unsigned long)81));
 	printf("Wurzel aus %lu ist %lu\n",(unsigned long)0, squareroot((unsigned long)0));
 	printf("Wurzel aus %lu ist %lu\n",(unsigned long)9999, squareroot((unsigned long)9999));
+	printf("Wurzel aus %lu ist %lu\n",(unsigned long)9, squareroot((unsigned long)9));
 	return 0;
 }
