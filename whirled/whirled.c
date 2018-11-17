@@ -4,9 +4,9 @@ void *malloc(unsigned long);
 const char *whirled(const char * const str);
 unsigned long int stringLen(const char * const string, unsigned long int length);
 void flipNtranslate(const char * const str, char * stringNew, unsigned long int length, unsigned long int iterator);
+char translate(char translateChar);
 
 // Deklaration der Aufgabenfunktion
-// ein Parameter uebergeben?
 int main(int carg, const char **varg){
 	if (carg != 2) return -1;
 	printf("Die verwürfelte Version von \"%s\" ist \"%s\".\n", // gibt Ergebnis aus
@@ -14,15 +14,11 @@ int main(int carg, const char **varg){
 	return 0;
 }
 
-// Ihr Code ab hier
-
 unsigned long int stringLen(const char * const string, unsigned long int length){
 	if(string[length] != 0){
 		return stringLen(string, ++length);
 	}
-	else {
-		return ++length;
-	}
+	return ++length;
 }
 
 char translate(char translateChar){
@@ -39,10 +35,8 @@ void flipNtranslate(const char * const str, char * stringNew, unsigned long int 
 		stringNew[length] = '\0';
 		return;
 	}
-	else{
-		stringNew[iterator] = translate(str[(length - 2) - iterator]);
-		flipNtranslate(str, stringNew, length, ++iterator);
-	}
+	stringNew[iterator] = translate(str[(length - 2) - iterator]);
+	flipNtranslate(str, stringNew, length, ++iterator);
 }
 
 const char *whirled(const char * const str){
