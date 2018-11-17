@@ -3,7 +3,7 @@ int printf(const char * restrict, ...);
 void *malloc(unsigned long);
 const char *whirled(const char * const str);
 unsigned long int stringLen(const char * const string, unsigned long int length);
-void flip(const char * const string, char * stringNew, unsigned long int laenge, unsigned long int iterator);
+void flip(const char * const str, char * stringNew, unsigned long int laenge, unsigned long int iterator);
 
 // Deklaration der Aufgabenfunktion
 // ein Parameter uebergeben?
@@ -26,15 +26,27 @@ unsigned long int stringLen(const char * const string, unsigned long int length)
 	}
 }
 
-void flip(const char * const string, char * stringNew, unsigned long int laenge, unsigned long int iterator){
-	if (iterator == laenge){
-		stringNew[iterator] = '\0';
-		return;
-	}else{
-		stringNew[iterator] = string[laenge - iterator];
-		flip(string, stringNew, laenge, ++iterator);
+char translate(char translateChar){
+	if (translateChar >= 65 && translateChar <= 90){
+		int difference = (77 - translateChar) * 2 + 1;
+		translateChar += difference;
+	}else if (translateChar >= 97 && translateChar <= 122){
+		int difference = (109 - translateChar) * 2 + 1;
+		translateChar += difference;
 	}
-	
+	return translateChar;
+}
+
+void flip(const char * const str, char * stringNew, unsigned long int laenge, unsigned long int iterator){
+	if (iterator == laenge){
+		stringNew[laenge] = '\0';
+		return;
+	}
+	else{
+		stringNew[iterator] = translate(str[(laenge - 2) - iterator]);
+		iterator ++;
+		flip(str, stringNew, laenge, iterator);
+	}
 }
 
 const char *whirled(const char * const str){
@@ -42,9 +54,8 @@ const char *whirled(const char * const str){
 	unsigned long int laenge = stringLen(str, 0);
 	// Allocate new editable pointer
 	char *pointer = (char *)malloc(laenge);
-	// flip
-	unsigned long int iterator = 0;
-	flip(str, pointer, laenge, iterator);
-	// translate
+	// Flip it
+	flip(str, pointer, laenge, 0);
+	printf("%s\n", pointer);
 	return pointer;
 }
