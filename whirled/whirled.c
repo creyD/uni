@@ -3,7 +3,7 @@ int printf(const char * restrict, ...);
 void *malloc(unsigned long);
 const char *whirled(const char * const str);
 unsigned long int stringLen(const char * const string, unsigned long int length);
-void flip(const char * const str, char * stringNew, unsigned long int laenge, unsigned long int iterator);
+void flipNtranslate(const char * const str, char * stringNew, unsigned long int length, unsigned long int iterator);
 
 // Deklaration der Aufgabenfunktion
 // ein Parameter uebergeben?
@@ -18,8 +18,7 @@ int main(int carg, const char **varg){
 
 unsigned long int stringLen(const char * const string, unsigned long int length){
 	if(string[length] != 0){
-		length++;
-		return stringLen(string, length);
+		return stringLen(string, ++length);
 	}
 	else {
 		return ++length;
@@ -28,34 +27,30 @@ unsigned long int stringLen(const char * const string, unsigned long int length)
 
 char translate(char translateChar){
 	if (translateChar >= 65 && translateChar <= 90){
-		int difference = (77 - translateChar) * 2 + 1;
-		translateChar += difference;
+		translateChar += (77 - translateChar) * 2 + 1;
 	}else if (translateChar >= 97 && translateChar <= 122){
-		int difference = (109 - translateChar) * 2 + 1;
-		translateChar += difference;
+		translateChar += (109 - translateChar) * 2 + 1;
 	}
 	return translateChar;
 }
 
-void flip(const char * const str, char * stringNew, unsigned long int laenge, unsigned long int iterator){
-	if (iterator == laenge){
-		stringNew[laenge] = '\0';
+void flipNtranslate(const char * const str, char * stringNew, unsigned long int length, unsigned long int iterator){
+	if (iterator == length){
+		stringNew[length] = '\0';
 		return;
 	}
 	else{
-		stringNew[iterator] = translate(str[(laenge - 2) - iterator]);
-		iterator ++;
-		flip(str, stringNew, laenge, iterator);
+		stringNew[iterator] = translate(str[(length - 2) - iterator]);
+		flipNtranslate(str, stringNew, length, ++iterator);
 	}
 }
 
 const char *whirled(const char * const str){
 	// Get the length of the string
-	unsigned long int laenge = stringLen(str, 0);
+	unsigned long int length = stringLen(str, 0);
 	// Allocate new editable pointer
-	char *pointer = (char *)malloc(laenge);
-	// Flip it
-	flip(str, pointer, laenge, 0);
-	printf("%s\n", pointer);
+	char *pointer = (char *)malloc(length);
+	// flipNtranslate it
+	flipNtranslate(str, pointer, length, 0);
 	return pointer;
 }
