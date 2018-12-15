@@ -1,20 +1,20 @@
 #include "stdaup.h"
 #include "charset.h"
 
-int main() {
-charset_t *s1 = charset_new("Hallo"); charset_t *s2 = charset_new("ABCabc"); char *str1 = charset_tos(s1); charset_op(s1,s2,CS_UNION);
-char *str2 = charset_tos(s1);
-printf("str1=\"%s\"\n",str1); // ergibt: "aHlo" 
-printf("str2=\"%s\"\n",str2); // ergibt: "AaBbCcHlo"
-free(s1); free(s2); free(str1); free(str2); return 0;
-}
-
-// Laenge eines Strings
+// Gibt die Laenge eines Strings zurueck
 int stringLength(const char * string, unsigned long int length){
-	if(string[length] != 0){
+	if (string[length] != 0){
 		return stringLength(string, ++length);
 	}
 	return ++length;
+}
+
+int main() {
+	charset_t *s1 = charset_new("Hallo"); charset_t *s2 = charset_new("ABCabc"); char *str1 = charset_tos(s1); charset_op(s1,s2,CS_UNION);
+	char *str2 = charset_tos(s1);
+	printf("str1=\"%s\"\n",str1); // ergibt: "aHlo" 
+	printf("str2=\"%s\"\n",str2); // ergibt: "AaBbCcHlo"
+	free(s1); free(s2); free(str1); free(str2); return 0;
 }
 
 // Exponentialfunktion
@@ -26,6 +26,16 @@ int expon(int base, int exp){
 		}
 	}
 	return c;
+}
+
+// Ueberpruefe ob ein Element in einem Chararray vorhanden ist
+int stringContains(char * searchString, char test){
+	for (int i = 0; i < stringLength(searchString, 0); i++){
+		if (searchString[i] == test){
+			return 1;
+		}
+	}
+	return 0;
 }
 
 charset_t *charset_new(const char* elements){
@@ -81,11 +91,15 @@ int charset_op(charset_t* s1, const charset_t *s2, csopt_t op){
 }
 
 char *charset_tos(const charset_t* s){
-	char *string = (char *) malloc(7);
+	// Reserviere die maximale Anzahl an Zeichenketten (alle Grossbuchstaben (26) + Kleinbuchstaben (26) + Nullterm (1))
+	char *string = (char *) malloc(52);
+	// Iterator fuer die Stelle im Zielstring, die beschrieben wird
 	int iterator = 0;
 	for (int i = 0; i < 7; i++){
 		for (int j = 0; j < 8; j++){
+			// Verknuepfe die Stelle im Charset mit der j-ten Potenz von 2 -> Wenn wahr dann ist die Stelle besetzt, wenn falsch nicht
 			if (s->bits[i] & expon(2, 7 - j)){
+				// Determiniere ob das Zeichen ein Grossbuchstabe ist
 				if ((i * 8) + j + 65 <= 90){
 					string[iterator] = (i * 8) + j + 65;
 				}
@@ -96,5 +110,28 @@ char *charset_tos(const charset_t* s){
 			}
 		}
 	}
-	return string;
+	// Nullterminieren fuer Weiterverwendbarkeit des Strings
+	string[iterator] = '\0';
+	// Den Speicher auf die noetige Groesse beschraenken um ueberfluessigen Speicher freizugeben
+	string = (char *) realloc(string, iterator);
+
+	// Sortiere den String nach den gegebenen Kriterien
+	int stelleSortiert = 0;
+	char *sortierterString = (char *) malloc(iterator);
+
+	for (int i = 0; i < 26; i++){
+		if (stringContains(string, 65 + i)){
+			sortierterString[stelleSortiert] = 65 + i;
+			stelleSortiert++;
+		}
+		if (stringContains(string, 97 + i)){
+			sortierterString[stelleSortiert] = 97 + i;
+			stelleSortiert++;
+		}
+	}
+	// Neuen String nullterminieren fuer weiterverwendbarkeit
+	sortierterString[stelleSortiert] = '\0';
+	// Speicher fuer den initialen Speicher wieder freigeben
+	free(string);
+	return sortierterString;
 }
