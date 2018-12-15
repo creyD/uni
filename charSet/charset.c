@@ -9,14 +9,6 @@ int stringLength(const char * string, unsigned long int length){
 	return ++length;
 }
 
-int main() {
-	charset_t *s1 = charset_new("Hallo"); charset_t *s2 = charset_new("ABCabc"); char *str1 = charset_tos(s1); charset_op(s1,s2,CS_UNION);
-	char *str2 = charset_tos(s1);
-	printf("str1=\"%s\"\n",str1); // ergibt: "aHlo" 
-	printf("str2=\"%s\"\n",str2); // ergibt: "AaBbCcHlo"
-	free(s1); free(s2); free(str1); free(str2); return 0;
-}
-
 // Exponentialfunktion
 int expon(int base, int exp){
 	int c = 1;
@@ -119,6 +111,7 @@ char *charset_tos(const charset_t* s){
 	int stelleSortiert = 0;
 	char *sortierterString = (char *) malloc(iterator);
 
+	// Jede Stelle des Alphabets ueberpruefen und erst den Grossbuchstaben und dann den Kleinbuchstaben hinzufuegen
 	for (int i = 0; i < 26; i++){
 		if (stringContains(string, 65 + i)){
 			sortierterString[stelleSortiert] = 65 + i;
@@ -131,7 +124,8 @@ char *charset_tos(const charset_t* s){
 	}
 	// Neuen String nullterminieren fuer weiterverwendbarkeit
 	sortierterString[stelleSortiert] = '\0';
-	// Speicher fuer den initialen Speicher wieder freigeben
+	// Speicher fuer den initialen String wieder freigeben
 	free(string);
+
 	return sortierterString;
 }
