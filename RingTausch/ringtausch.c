@@ -15,6 +15,7 @@ unsigned long expon(unsigned long base, unsigned long exp){
 	return c;
 }
 
+// Ringtauschfunktion
 unsigned long ringshift(unsigned long v, unsigned short b, unsigned short k){
 	// Umrechnen der Zahl in das Zielsystem
 	int *converted = (int *) malloc(sizeof(int) * (v / b + 1));
@@ -52,12 +53,13 @@ unsigned long ringshift(unsigned long v, unsigned short b, unsigned short k){
 		flipped--;
 	}
 	free(flipped);
-	k++;
 	return result;
 }
 
 int main()
 {
 	printf("%lu\n", ringshift(1234,10,2));
+	printf("%lu\n", ringshift(1234,2,3));
+	printf("%lu\n", ringshift(1000,23,1));
 	return 0;
 }
