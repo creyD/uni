@@ -16,38 +16,48 @@ unsigned long expon(unsigned long base, unsigned long exp){
 }
 
 unsigned long ringshift(unsigned long v, unsigned short b, unsigned short k){
-	int i = 0;
-	// Konvertieren in das jeweilige Zahlensystem
+	// Umrechnen der Zahl in das Zielsystem
 	int *converted = (int *) malloc(sizeof(int) * (v / b + 1));
+	int counter = 0;
 	while (v > 0){
 		*converted = v % b;
-		v /= b;
 		converted++;
-		i++;
+		v /= b;
+		counter++;
 	}
-	
-	// Spiegeln der Zahl
-	int *flipped = (int *) malloc(sizeof(int) * i);
-	for (int f = 0; f < i; f++){
-		*flipped = *converted;
+
+	// Spiegeln und tauschen der Zahlen
+	int *flipped = (int *) malloc(sizeof(int) * counter);
+	int cache = 0;
+	for (int i = 0; i < counter; i++){
 		converted--;
+		if (i == counter - (k + 2)){
+			cache = *converted;
+			*flipped = *(converted - 1);
+		}else if (i == counter - (k + 1)){
+			*flipped = *(converted - 1);
+		}else if (i == counter - k){
+			*flipped = cache;
+		}else{
+			*flipped = *converted;
+		}
 		flipped++;
 	}
 	free(converted);
 
 	// Zurueckkonvertierung in das Dezimalsystem
 	unsigned long result = 0;
-	for (int f = i; f > 0; f--){
-		result += *(flipped - 1) * expon(b, f);
+	for (int i = 0; i < counter; i++){
+		result += *(flipped - 1) * expon(b, i);
 		flipped--;
 	}
-	k++;
 	free(flipped);
+	k++;
 	return result;
 }
 
 int main()
 {
-	printf("%lu\n", ringshift(123456789, 10, 2));
+	printf("%lu\n", ringshift(1234,10,2));
 	return 0;
 }
