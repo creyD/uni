@@ -2,29 +2,6 @@
 
 unsigned long ringshift(unsigned long v, unsigned short b, unsigned short k);
 unsigned long maxringshift(unsigned long v, unsigned short b, unsigned short l);
-unsigned long convert(unsigned v, unsigned short b);
-unsigned long shift(unsigned long number, unsigned short k);
-unsigned long convertToDecimal(unsigned long number, unsigned short b);
-unsigned long expon(unsigned long base, unsigned long exp);
-
-unsigned long convert(unsigned v, unsigned short b){
-	unsigned long converted = 0, remaining = v, counter = 1;
-	while (remaining > 0){
-		converted += (remaining % b) * counter;
-		remaining /= b;
-		counter *= 10;
-	}
-	return converted;
-}
-
-unsigned long shift(unsigned long number, unsigned short k){
-	if (k <= 0){
-		
-	}else{
-		
-	}
-	return 1;
-}
 
 // Exponentialfunktion
 unsigned long expon(unsigned long base, unsigned long exp){
@@ -38,21 +15,46 @@ unsigned long expon(unsigned long base, unsigned long exp){
 	return c;
 }
 
-unsigned long convertToDecimal(unsigned long number, unsigned short b){
-	unsigned long decimal = 0, counter = 0;
-	while (number > 0){
-		decimal += number % 10 * expon(b, counter);
-		number /= 10;
-		counter++;
+// Pointer muss an linkster Stelle sein
+unsigned long convertToDecimal(int * number, unsigned short b, int i){
+	unsigned long decimal = 0;
+	for (int f = i; f >= 0; f--){
+		decimal += *number * expon(b, f);
+		number--;
 	}
 	return decimal;
 }
 
-
 unsigned long ringshift(unsigned long v, unsigned short b, unsigned short k){
-	unsigned long converted = convert(v, b);
-	unsigned long shifted = shift(converted, k);
-	unsigned long result = convertToDecimal(shifted, b);
+	unsigned long remaining = v;
+	int i = 0;
+	int *converted = (int *) malloc((sizeof(int) * (v / (b + 1))));
+
+	while (remaining > 0){
+		*converted = remaining % b;
+		remaining /= b;
+		converted++;
+		i++;
+	}
+
+	int *flipped = (int *) malloc(sizeof(int) * i);
+	for (int f = i; f >= 0; f--){
+		*flipped = *converted;
+		converted--;
+		flipped++;
+	}
+	free(converted);
+
+	// Ringtausch
+	for (int f = i; f >= 0; f--){
+		if (f == k){
+			*flipped = 0;
+		}
+		flipped--;
+	}
+
+	unsigned long result = convertToDecimal(flipped, b, i);
+	free(flipped);
 	return result;
 }
 
