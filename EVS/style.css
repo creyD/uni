@@ -1,0 +1,59 @@
+#wrapper{
+	background-color: rgb(14,121,121);
+	height: auto;
+	position: relative;
+	z-index: 0;
+}
+
+.foregroundText{
+
+}
+
+.backgroundText{
+	position: absolute;
+	z-index: 1;
+}
+
+#left{
+	float: left;
+	background-color: rgb(221,221,221);
+	width: 19%;
+}
+
+#right{
+	float: right;
+	background-color: rgb(221,221,221);
+	width: 79%;
+}
+
+#clear{
+	clear: both;
+}
+
+ul{
+	list-style-type: square;
+}
+
+table{
+	margin-left:auto; 
+	margin-right:auto;
+	border-collapse: collapse;
+}
+
+th{
+	background-color: rgb(14,121,121);
+	color: white;
+}
+
+td{
+	border: 1px solid rgb(14,121,121);
+}
+
+h1{
+	background-color: rgb(14,121,121);
+	color: white;
+}
+
+*{
+	background-color: rgb(204,204,204);
+}

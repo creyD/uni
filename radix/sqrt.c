@@ -34,5 +34,6 @@ int main (){
 	printf("Wurzel aus %lu ist %lu\n",(unsigned long)0, squareroot((unsigned long)0));
 	printf("Wurzel aus %lu ist %lu\n",(unsigned long)9999, squareroot((unsigned long)9999));
 	printf("Wurzel aus %lu ist %lu\n",(unsigned long)9, squareroot((unsigned long)9));
+	printf("Wurzel aus %lu ist %lu\n",(unsigned long)1, squareroot((unsigned long)1));
 	return 0;
 }
