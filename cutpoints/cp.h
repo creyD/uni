@@ -13,4 +13,5 @@ typedef struct {
   point_t     points[3];    // Punkte
 } sprite_t;
   
-point_t *cutpoints(sprite_t sprite_a, sprite_t shape_b, int *num);
+point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num)
+;

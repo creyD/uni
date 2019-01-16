@@ -1,9 +1,4 @@
 /* Functions of the C standard library that may be used in Algorithms and Programming */
-//#if defined(__gnu_linux__) && defined(__amd64)
-//#else
-//#pragma message "This header file is for use with OpenSubmit. You have a different platform. Use at own risk."
-//#endif
-
 typedef unsigned long size_t;
 #define NULL 0L
 
