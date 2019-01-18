@@ -1,26 +1,35 @@
+#include <math.h>
 #include "cp.h"
 #include "stdaup.h"
-#include "math.h"
+
+int is_duplicate(point_t point, point_t *array, int elements){
+	for (int i = 0; i < elements; i++){
+		if (array[i].x == point.x && array[i].y == point.y){
+			return 1;
+		}
+	}
+	return 0;
+}
 
 // Berechnet den Schnittpunkt zweier Strecken (gibt 0 zuruek wenn keine gefunden wurde)
 int get_hitpoint(point_t a, point_t b, point_t c, point_t d, point_t *results, int counter){
-	double denom = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
-	if (fabs(denom) == 0){
+	double determ = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
+	if (determ == 0){
 		return 0; 
 	}
-	double ua = ((d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x)) / denom;
-	double ub = ((b.x - a.x) * (a.y - c.y) - (b.y - a.y) * (a.x - c.x)) / denom;
+	double ua = ((d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x)) / determ;
+	double ub = ((b.x - a.x) * (a.y - c.y) - (b.y - a.y) * (a.x - c.x)) / determ;
+
 	if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1){
 		double x = a.x + ua * (b.x - a.x);
 		double y = a.y + ua * (b.y - a.y);
 		point_t schnittpunkt = {x, y};
-		// Duplicate Check Pending
-		//printf("Gefundener Schnittpunkt: %f | %f\n", schnittpunkt.x, schnittpunkt.y);
-		results[counter] = schnittpunkt;
-		return 1;
-	} else {
-		return 0;
+		if (is_duplicate(schnittpunkt, results, counter) != 1){
+			results[counter] = schnittpunkt;
+			return 1;
+		}
 	}
+	return 0;
 }
 
 // Berechnet die Strecke zwischen 2 Punkten
@@ -71,12 +80,12 @@ viereck get_last_point(sprite_t a){
 point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 	// Array fuer die Ergebnisse anlegen (max 8 Schnittpunkte)
 	point_t *results = (point_t *)malloc(8 * sizeof(point_t));
+	*num = 0;
 	// Schnittpunkte auf 0 setzen, um Fehlausgaben zu verhindern
 	int array[6] = {0,0,0,1,1,2};
 	int array2[6] = {1,2,3,2,3,3};
-	*num = 0;
 	if (sprite_a.type == SHAPE_CIRCLE || sprite_b.type == SHAPE_CIRCLE){
-		printf("Noch nicht bearbeitet.");
+		
 	}else if (sprite_a.type == SHAPE_TRIANGLE && sprite_b.type == SHAPE_TRIANGLE){
 		for (int i = 0; i <= 2; i++){
 			for (int j = 0; j <= 2; j++){
@@ -95,6 +104,7 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 			}
 		}
 	}else{
+		// Viereck und Dreieck trennen und einheitlich in a und b betiteln
 		viereck a;
 		sprite_t b;
 		if (sprite_a.type == SHAPE_RECTANGLE){
@@ -112,13 +122,19 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 			}
 		}
 	}
+
+	if (*num == 0){
+		results = NULL;
+	}else{
+		results = (point_t *) realloc(results, sizeof(point_t) * *num);
+	}
 	return results;
 }
 
 int main()
 {
 	sprite_t sprite_a={.type=SHAPE_TRIANGLE, .points = {{-1.0, -2.0},{0.0, 1.0},{1.0, -2.0}}};
-	sprite_t sprite_b={.type=SHAPE_RECTANGLE, .points = {{-1.0, 0.0},{-1.0, 1.0}, {1.0, 1.0}}};
+	sprite_t sprite_b={.type=SHAPE_RECTANGLE, .points = {{-1.0, 0.0},{-1.0, -1.0}, {1.0, -1.0}}};
 	int *number = (int *)malloc(10);
 	point_t *test = cutpoints(sprite_a, sprite_b, number);
 
