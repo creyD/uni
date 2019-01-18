@@ -1,6 +1,10 @@
 #include <math.h>
 #include "cp.h"
-#include "stdaup.h"
+
+typedef unsigned long size_t;
+extern void *malloc(size_t);
+extern void *realloc (void *, size_t);
+extern int printf(const char *restrict __format, ...);
 
 int is_duplicate(point_t point, point_t *array, int elements){
 	for (int i = 0; i < elements; i++){
@@ -93,7 +97,6 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 			}
 		}
 	}else if (sprite_a.type == SHAPE_RECTANGLE && sprite_b.type == SHAPE_RECTANGLE){
-		// TODO: Quadrate checken
 		viereck a = get_last_point(sprite_a);
 		viereck b = get_last_point(sprite_b);
 		for (int i = 0; i < 6; i++){
