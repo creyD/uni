@@ -1,6 +1,8 @@
 #include <math.h>
 #include "cp.h"
 
+#define NULL 0L
+
 typedef unsigned long size_t;
 extern void *malloc(size_t);
 extern void *realloc (void *, size_t);
