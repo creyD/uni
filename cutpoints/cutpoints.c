@@ -45,6 +45,11 @@ int get_hitpoint(point_t a, point_t b, point_t c, point_t d, point_t *results, i
 	return 0;
 }
 
+// Berechnet den Schnittpunkt zwischen Strecke AB und Kreis c
+int get_hitpoint_circle(point_t a, point_t b, kreis c){
+	
+}
+
 // Berechnet die Strecke zwischen 2 Punkten
 double get_distance(point_t a, point_t b){
 	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
@@ -97,8 +102,6 @@ kreis get_kreis(sprite_t a){
 	}
 	// Radius anhand der Determinanten berechnen
 	double radius = sqrt(pow(determ_b/2, 2) + pow(determ_c/2, 2) - determ_a);
-
-	printf("Radius: %f xm: %f ym: %f\n", radius, determ_b/2, determ_c/2);
 	kreis new_kreis = {.points = {{a.points[0].x,a.points[0].y},{a.points[1].x,a.points[1].y},{a.points[2].x,a.points[2].y}}, .mittelpunkt = {determ_b/2, determ_c/2}, .radius = radius};
 	return new_kreis;
 }
@@ -110,7 +113,7 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 	*num = 0;
 	int array[6] = {0,0,0,1,1,2}, array2[6] = {1,2,3,2,3,3};
 	if (sprite_a.type == SHAPE_CIRCLE || sprite_b.type == SHAPE_CIRCLE){
-		printf("In Arbeit!\n");
+		kreis a = get_kreis(sprite_a);
 	}else if (sprite_a.type == SHAPE_TRIANGLE && sprite_b.type == SHAPE_TRIANGLE){
 		for (int i = 0; i <= 2; i++){
 			for (int j = 0; j <= 2; j++){
