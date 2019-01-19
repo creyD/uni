@@ -159,7 +159,24 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 	*num = 0;
 	// Fuer leichtere Koordination der Routenmoeglichkeiten zwischen 4 Punkten/ alle Moeglichkeiten hier als 2 Listen
 	int options[6] = {0,0,0,1,1,2}, options2[6] = {1,2,3,2,3,3};
-	if (sprite_a.type == SHAPE_CIRCLE || sprite_b.type == SHAPE_CIRCLE){
+	if (sprite_a.type == SHAPE_CIRCLE && sprite_b.type == SHAPE_CIRCLE){
+		// Option 6: Kreis a und Kreis b
+		kreis a = get_kreis(sprite_a);
+		kreis b = get_kreis(sprite_b);
+		double abstand = sqrt(pow(b.mittelpunkt.x - a.mittelpunkt.x, 2) + pow(b.mittelpunkt.y - a.mittelpunkt.y, 2));
+		if (abstand != 0){
+			double x = (pow(a.radius, 2) + pow(abstand, 2) - pow(b.radius, 2)) / (2 * abstand);
+
+			double y_one = sqrt(pow(a.radius, 2) - pow(x, 2));
+			double y_two = -1 * sqrt(pow(a.radius, 2) - pow(x, 2));
+			
+			point_t one = {x, y_one};
+			results[0] = one;
+			point_t two = {x, y_two};
+			results[1] = two;
+			*num += 2;
+		}
+	}else if (sprite_a.type == SHAPE_CIRCLE || sprite_b.type == SHAPE_CIRCLE){
 		kreis a = {.radius=0.0}; viereck b = {.max_betrag=0.0}; sprite_t c = {.type = SHAPE_TRIANGLE}; // Kein Fehler, da diese Instanz spaeter zum Vergleich genutzt wird um zu determinieren, ob ein 
 		if (sprite_a.type == SHAPE_CIRCLE){
 			a = get_kreis(sprite_a);
@@ -226,25 +243,10 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 			}
 		}
 	}
-
 	if (*num == 0){
 		results = NULL;
 	}else{
 		results = (point_t *) realloc(results, sizeof(point_t) * *num);
 	}
 	return results;
-}
-
-int main()
-{
-	sprite_t sprite_a={.type=SHAPE_CIRCLE, .points = {{1.5, 2.0},{1.0, 2.5},{0.5, 2.0}}};
-	sprite_t sprite_b={.type=SHAPE_Tra, .points = {{0.0, 0.0}, {1.0, 0.0}, {0.0, 2.0}}};
-	int *number = (int *)malloc(10);
-	point_t *test = cutpoints(sprite_a, sprite_b, number);
-
-	for (int i = 0; i < *number; i++){
-		printf("Schnittpunkt %i: %f | %f\n", i + 1, test[i].x, test[i].y);
-	}
-
-	return 0;
 }
