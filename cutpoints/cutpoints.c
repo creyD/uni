@@ -15,9 +15,21 @@ typedef struct {
 	point_t		mittelpunkt;
 } kreis;
 
-int is_duplicate(point_t point, point_t *array, int elements){
+// Ueberprueft ob 2 sprites gleich sind
+int is_equal(sprite_t a, sprite_t b){
+	if (a.type == b.type){
+		for (int i = 0; i < 2; i++){
+			if (!(a.points[i].x == b.points[i].x && a.points[i].y == b.points[i].y)){
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
+int is_duplicate(point_t point, point_t *options, int elements){
 	for (int i = 0; i < elements; i++){
-		if (array[i].x == point.x && array[i].y == point.y){
+		if (options[i].x == point.x && options[i].y == point.y){
 			return 1;
 		}
 	}
@@ -45,9 +57,43 @@ int get_hitpoint(point_t a, point_t b, point_t c, point_t d, point_t *results, i
 	return 0;
 }
 
-// Berechnet den Schnittpunkt zwischen Strecke AB und Kreis c
-int get_hitpoint_circle(point_t a, point_t b, kreis c){
-	
+// Berechnet den Schnittpunkt zwischen Strecke AB und Kreis c, fuegt ihn in results ein
+int get_hitpoints_circle(point_t a, point_t b, kreis c, point_t *results, int counter){
+	// Richtungsvektor der Gerade berechnen
+	//point_t richtungsvektor = {.x = b.x - a.x, .y = b.y - a.y};
+	if (b.x != a.x){
+		// Geradengleichung y = m * x + n
+		double m = (b.y - a.y) / (b.x - a.x);
+		double n = a.y - m * a.x;
+
+		double eins = 1 + pow(m, 2);
+		double zwei = 2 * m * n - 2 * m * c.mittelpunkt.y - 2 * c.mittelpunkt.x;
+		double drei = pow(n, 2) + pow(c.mittelpunkt.x, 2) + pow(c.mittelpunkt.y, 2) - pow(c.radius, 2) - 2 * n * c.mittelpunkt.y;
+		if (eins != 0){
+			// Gleichung eins * pow(x, 2) + zwei * x + drei in Normalform bringen
+			zwei /= eins;
+			drei /= eins;
+			if ((pow(zwei/2,2) - drei) >= 0){
+				// PQ Formel auf die beiden anwenden
+				double eins_x = -1 * zwei / 2 + sqrt(pow(zwei/2, 2) - drei);
+				double zwei_x = -1 * zwei / 2 - sqrt(pow(zwei/2, 2) - drei);
+				if (eins_x != zwei_x){
+					// Wenn es zwei (verschiedene) Ergebnisse gibt
+					point_t t = {.x = eins_x, .y = m * eins_x + n};
+					point_t f = {.x = zwei_x, .y = m * zwei_x + n};
+					results[counter] = t;
+					results[++counter] = f;
+					return 2;
+				}else{
+					// Wenn es ein Ergebnis gibt
+					point_t t = {.x = eins_x, .y = m * eins_x + n};
+					results[counter] = t;
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
 }
 
 // Berechnet die Strecke zwischen 2 Punkten
@@ -111,26 +157,58 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 	point_t *results = (point_t *)malloc(8 * sizeof(point_t));
 	// Schnittpunkte auf 0 initiieren, um Fehlausgaben zu verhindern
 	*num = 0;
-	int array[6] = {0,0,0,1,1,2}, array2[6] = {1,2,3,2,3,3};
+	// Fuer leichtere Koordination der Routenmoeglichkeiten zwischen 4 Punkten/ alle Moeglichkeiten hier als 2 Listen
+	int options[6] = {0,0,0,1,1,2}, options2[6] = {1,2,3,2,3,3};
 	if (sprite_a.type == SHAPE_CIRCLE || sprite_b.type == SHAPE_CIRCLE){
-		kreis a = get_kreis(sprite_a);
+		kreis a = {.radius=0.0}; viereck b = {.max_betrag=0.0}; sprite_t c = {.type = SHAPE_TRIANGLE}; // Kein Fehler, da diese Instanz spaeter zum Vergleich genutzt wird um zu determinieren, ob ein 
+		if (sprite_a.type == SHAPE_CIRCLE){
+			a = get_kreis(sprite_a);
+			if (sprite_b.type == SHAPE_RECTANGLE){
+				b = get_viereck(sprite_b);
+			}else{
+				c = sprite_b;
+			}
+		}
+		if (sprite_b.type == SHAPE_CIRCLE){
+			a = get_kreis(sprite_b);
+			if (sprite_a.type == SHAPE_RECTANGLE){
+				b = get_viereck(sprite_a);
+			}else{
+				c = sprite_a;
+			}
+		}
+		if (sprite_a.type == SHAPE_TRIANGLE || sprite_b.type == SHAPE_TRIANGLE){
+			// Option 1: Kreis a und Dreieck c
+			for (int i = 0; i <= 2; i++){
+				*num += get_hitpoints_circle(c.points[i / 2], c.points[(int)round(i * 0.7) + 1], a, results, *num);
+			}
+		}else{
+			// Option 2: Kreis a und Viereck c
+			for (int i = 0; i < 6; i++){
+				if (!(b.max_betrag == get_distance(b.points[(int) options[i]], b.points[(int) options2[i]]))){
+					*num += get_hitpoints_circle(b.points[(int) options[i]], b.points[(int) options2[i]], a, results, *num);
+				}
+			}
+		}
 	}else if (sprite_a.type == SHAPE_TRIANGLE && sprite_b.type == SHAPE_TRIANGLE){
+		// Option 3: Dreieck und Dreieck
 		for (int i = 0; i <= 2; i++){
 			for (int j = 0; j <= 2; j++){
 				*num += get_hitpoint(sprite_a.points[i / 2], sprite_a.points[(int)round(i * 0.7) + 1], sprite_b.points[j / 2], sprite_b.points[(int)round(j * 0.7) + 1], results, *num);
 			}
 		}
 	}else if (sprite_a.type == SHAPE_RECTANGLE && sprite_b.type == SHAPE_RECTANGLE){
+		// Option 4: Viereck und Viereck
 		viereck a = get_viereck(sprite_a), b = get_viereck(sprite_b);
 		for (int i = 0; i < 6; i++){
 			for (int j = 0; j < 6; j++){
-				if (!(a.max_betrag == get_distance(a.points[(int) array[i]], a.points[(int) array2[i]]) || b.max_betrag == get_distance(b.points[(int) array[j]], b.points[(int) array2[j]]))){
-					*num += get_hitpoint(a.points[(int) array[i]], a.points[(int) array2[i]], b.points[(int) array[j]], b.points[(int) array2[j]], results, *num);
+				if (!(a.max_betrag == get_distance(a.points[(int) options[i]], a.points[(int) options2[i]]) || b.max_betrag == get_distance(b.points[(int) options[j]], b.points[(int) options2[j]]))){
+					*num += get_hitpoint(a.points[(int) options[i]], a.points[(int) options2[i]], b.points[(int) options[j]], b.points[(int) options2[j]], results, *num);
 				}
 			}
 		}
 	}else{
-		// Viereck und Dreieck trennen und einheitlich in a und b betiteln
+		// Option 5: Rechteck und Dreieck
 		viereck a;
 		sprite_t b;
 		if (sprite_a.type == SHAPE_RECTANGLE){
@@ -142,8 +220,8 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 		}
 		for (int i = 0; i < 6; i++){
 			for (int j = 0; j <= 2; j++){
-				if (!(a.max_betrag == get_distance(a.points[(int) array[i]], a.points[(int) array2[i]]))){
-					*num += get_hitpoint(a.points[(int) array[i]], a.points[(int) array2[i]], b.points[j / 2], b.points[(int)round(j * 0.7) + 1], results, *num);
+				if (!(a.max_betrag == get_distance(a.points[(int) options[i]], a.points[(int) options2[i]]))){
+					*num += get_hitpoint(a.points[(int) options[i]], a.points[(int) options2[i]], b.points[j / 2], b.points[(int)round(j * 0.7) + 1], results, *num);
 				}
 			}
 		}
@@ -159,15 +237,14 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 
 int main()
 {
-	sprite_t sprite_a={.type=SHAPE_CIRCLE, .points = {{5.0, 0.0}, {3.0, 2.0}, {3.0, -2.0}}};
-	get_kreis(sprite_a);
-	/*sprite_t sprite_a={.type=SHAPE_TRIANGLE, .points = {{-1.0, -2.0},{0.0, 1.0},{1.0, -2.0}}};
-	sprite_t sprite_b={.type=SHAPE_RECTANGLE, .points = {{-1.0, 0.0},{-1.0, -1.0}, {1.0, -1.0}}};
+	sprite_t sprite_a={.type=SHAPE_CIRCLE, .points = {{1.5, 2.0},{1.0, 2.5},{0.5, 2.0}}};
+	sprite_t sprite_b={.type=SHAPE_Tra, .points = {{0.0, 0.0}, {1.0, 0.0}, {0.0, 2.0}}};
 	int *number = (int *)malloc(10);
 	point_t *test = cutpoints(sprite_a, sprite_b, number);
 
 	for (int i = 0; i < *number; i++){
 		printf("Schnittpunkt %i: %f | %f\n", i + 1, test[i].x, test[i].y);
-	}*/
+	}
+
 	return 0;
 }
