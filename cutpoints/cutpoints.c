@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "cp.h"
 
-extern int printf(const char *restrict __format, ...);
-
 typedef struct {
 	point_t		points[4];
 	double		max_betrag;
@@ -15,7 +13,7 @@ typedef struct {
 	point_t		mittelpunkt;
 } kreis;
 
-// Ueberprueft ob 2 sprites gleich sind
+// Ueberprueft ob 2 sprites identisch sind
 int is_equal(sprite_t a, sprite_t b){
 	if (a.type == b.type){
 		for (int i = 0; i < 2; i++){
@@ -27,6 +25,7 @@ int is_equal(sprite_t a, sprite_t b){
 	return 1;
 }
 
+// Ueberprueft ob ein gefundener Punkt bereits im Ergebnis enthalten ist
 int is_duplicate(point_t point, point_t *options, int elements){
 	for (int i = 0; i < elements; i++){
 		if (options[i].x == point.x && options[i].y == point.y){
@@ -101,16 +100,19 @@ double get_distance(point_t a, point_t b){
 	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
 }
 
+// Addiert die Vektoren a und b
 point_t add_vectors(point_t a, point_t b){
 	point_t test = {a.x + b.x, a.y + b.y};
 	return test;
 }
 
+// Spannt einen Vektor zwischen Punkt a und Punkt b auf
 point_t span_vectors(point_t a, point_t b){
 	point_t result = {b.x - a.x, b.y - a.y};
 	return result;
 }
 
+// Errechnet aus einem Sprite a den vierten Punkt des Rechecks und den Betrag der Diagonale
 viereck get_viereck(sprite_t a){
 	double max_betrag = 0.0;
 	point_t basis, punkt_a, b, d;
@@ -128,6 +130,7 @@ viereck get_viereck(sprite_t a){
 	return new_viereck;
 }
 
+// Berechnet aus einem Sprite a den Radius und den Mittelpunkt und speichert diese in einem neuen Struct zwischen
 kreis get_kreis(sprite_t a){
 	// Determinante vom Gesamtsystem ausrechnen
 	double determ = a.points[1].x * a.points[2].y + a.points[0].x * a.points[1].y + a.points[2].x * a.points[0].y - a.points[1].x * a.points[0].y - a.points[2].x * a.points[1].y - a.points[0].x * a.points[2].y;
@@ -155,7 +158,7 @@ kreis get_kreis(sprite_t a){
 point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 	// Array fuer die Ergebnisse anlegen (max 8 Schnittpunkte)
 	point_t *results = (point_t *)malloc(8 * sizeof(point_t));
-	// Schnittpunkte auf 0 initiieren, um Fehlausgaben zu verhindern
+	// Anzahl der Schnittpunkte auf 0 initiieren, um Fehlausgaben zu verhindern
 	*num = 0;
 	// Fuer leichtere Koordination der Routenmoeglichkeiten zwischen 4 Punkten/ alle Moeglichkeiten hier als 2 Listen
 	int options[6] = {0,0,0,1,1,2}, options2[6] = {1,2,3,2,3,3};
@@ -164,17 +167,24 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 		kreis a = get_kreis(sprite_a);
 		kreis b = get_kreis(sprite_b);
 		double abstand = sqrt(pow(b.mittelpunkt.x - a.mittelpunkt.x, 2) + pow(b.mittelpunkt.y - a.mittelpunkt.y, 2));
+		// Wenn der Abstand 0 ist, dann beruehern sich die beiden Kreise entweder nicht oder sind identisch
 		if (abstand != 0){
 			double x = (pow(a.radius, 2) + pow(abstand, 2) - pow(b.radius, 2)) / (2 * abstand);
+			// Option 6.1: Zwei Schnittpunkte
+			if (pow(a.radius, 2) > pow(x, 2)){
+				double y_one = sqrt(pow(a.radius, 2) - pow(x, 2));
+				double y_two = -1 * sqrt(pow(a.radius, 2) - pow(x, 2));
 
-			double y_one = sqrt(pow(a.radius, 2) - pow(x, 2));
-			double y_two = -1 * sqrt(pow(a.radius, 2) - pow(x, 2));
-			
-			point_t one = {x, y_one};
-			results[0] = one;
-			point_t two = {x, y_two};
-			results[1] = two;
-			*num += 2;
+				point_t one = {x, y_one};
+				results[0] = one;
+				point_t two = {x, y_two};
+				results[1] = two;
+				*num += 2;
+			}else if (pow(a.radius, 2) == pow(x, 2)){
+				// Option 6.2: Ein Schnittpunkt (zwei Kreise)
+				get_hitpoints_circle(a.mittelpunkt, b.mittelpunkt, a, results, *num);
+				*num += 1;
+			}
 		}
 	}else if (sprite_a.type == SHAPE_CIRCLE || sprite_b.type == SHAPE_CIRCLE){
 		kreis a = {.radius=0.0}; viereck b = {.max_betrag=0.0}; sprite_t c = {.type = SHAPE_TRIANGLE}; // Kein Fehler, da diese Instanz spaeter zum Vergleich genutzt wird um zu determinieren, ob ein 
@@ -243,9 +253,12 @@ point_t *cutpoints(sprite_t sprite_a, sprite_t sprite_b, int *num){
 			}
 		}
 	}
+
+	// Wenn keine Schnittpunkte gefunden wurden, gebe den NULL-Pointer zurueck
 	if (*num == 0){
 		results = NULL;
 	}else{
+		// Speicher auf das noetigste begrenzen
 		results = (point_t *) realloc(results, sizeof(point_t) * *num);
 	}
 	return results;
