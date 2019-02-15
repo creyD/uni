@@ -1,25 +1,26 @@
-def convertToN():
-	print('From Decimal to any System (n > 10)')
-	print('Insert Destination System Base')
-	base_des = int(input())
+# Horner Scheme
+# Conversion from and to the decimal system from
+# and to all systems with a base < 10 according to the Horner Scheme
 
-	print('Insert Number')
-	number = int(input())
 
-	remainder, i, converted = number, 0, 0
+def decToN(number, destination_base):
+    remainder, i, converted = number, 0, 0
 
-	while remainder != 0:
-		converted += (remainder % base_des) * (10 ** i)
-		remainder = remainder // base_des
-		i += 1
+    while remainder != 0:
+        converted += (remainder % destination_base) * (10 ** i)
+        remainder = remainder // destination_base
+        i += 1
 
-	print(converted)
+    return converted
 
-def convertToDec():
-	print('From any System (n > 10) to Decimal')
-	print('Insert Origin System Base')
-	base_ori = int(input())
 
-	print('Insert Number')
-	number = int(input())
-	
+def nToDec(number, origin_base):
+    converted = 0
+
+    for i in range(0, len(str(number))):
+        converted += int(str(number)[(len(str(number)) - 1) - i]) \
+            * origin_base ** i
+
+    return converted
+
+print(nToDec(1010, 2))
