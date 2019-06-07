@@ -1,0 +1,194 @@
+# depslib dependency file v1.0
+1490274045 source:c:\eigene programme\c++\prakcg_neu\help.cpp
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<cmath>
+	<ctime>
+	"Include/freeglut.h"
+	"help.h"
+
+1490273743 c:\eigene programme\c++\prakcg_neu\help.h
+
+1490273895 source:c:\eigene programme\c++\prakcg_neu\template_prakcg.cpp
+	<stdlib.h>
+	<math.h>
+	<stdio.h>
+	"Include/freeglut.h"
+	"Include/glext.h"
+	"help.h"
+	"window.h"
+	"wavefront.h"
+	"input.h"
+	"light.h"
+
+1474874521 c:\eigene programme\c++\prakcg_neu\glext.h
+	<windows.h>
+	<stddef.h>
+
+1482788471 c:\eigene programme\c++\prakcg_neu\wavefront.h
+	"Include/glext.h"
+
+1474874521 source:c:\eigene programme\c++\prakcg_neu\vbo.cpp
+	"vbo.h"
+
+1474874521 c:\eigene programme\c++\prakcg_neu\vbo.h
+	<GL/glut.h>
+	"glext.h"
+
+1483173961 source:c:\eigene programme\c++\prakcg_neu\wavefront.cpp
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<math.h>
+	"Include/freeglut.h"
+	"wavefront.h"
+
+1480394056 c:\eigene programme\c++\prakcg_neu\light.h
+	"Include/freeglut.h"
+
+1481576142 source:c:\eigene programme\c++\prakcg_neu\light.cpp
+	"light.h"
+
+1476628526 source:c:\eigene programme\c++\prakcg_neu\input.cpp
+	"input.h"
+	"Include/freeglut.h"
+
+1478878903 c:\eigene programme\c++\prakcg_neu\input.h
+
+1475764104 c:\eigene programme\c++\prakcg_neu\include\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1475764104 c:\eigene programme\c++\prakcg_neu\include\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1475764104 c:\eigene programme\c++\prakcg_neu\include\freeglut_ext.h
+	<stdarg.h>
+
+1474870921 c:\eigene programme\c++\prakcg_neu\include\glext.h
+	<windows.h>
+	<stddef.h>
+
+1485851070 source:c:\eigene programme\c++\prakcg_neu\window.cpp
+	"window.h"
+	"wavefront.h"
+	"input.h"
+
+1485851070 c:\eigene programme\c++\prakcg_neu\window.h
+	"Include/freeglut.h"
+
+1485389092 source:c:\eigene programme\c++\prakcg_neu\image.cpp
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<sys/types.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<io.h>
+	<unistd.h>
+	"image.h"
+
+1485389595 c:\eigene programme\c++\prakcg_neu\image.h
+	"Include/freeglut.h"
+	<GL/freeglut.h>
+
+1490277645 source:c:\eigene programme\c++\prakcg_u01\help.cpp
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<cmath>
+	<ctime>
+	"Include/freeglut.h"
+	"help.h"
+
+1475767704 c:\eigene programme\c++\prakcg_u01\include\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1475767704 c:\eigene programme\c++\prakcg_u01\include\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1475767704 c:\eigene programme\c++\prakcg_u01\include\freeglut_ext.h
+	<stdarg.h>
+
+1490277343 c:\eigene programme\c++\prakcg_u01\help.h
+
+1485392692 source:c:\eigene programme\c++\prakcg_u01\image.cpp
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<sys/types.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<io.h>
+	<unistd.h>
+	"image.h"
+
+1485393195 c:\eigene programme\c++\prakcg_u01\image.h
+	"Include/freeglut.h"
+	<GL/freeglut.h>
+
+1476632126 source:c:\eigene programme\c++\prakcg_u01\input.cpp
+	"input.h"
+	"Include/freeglut.h"
+
+1478882503 c:\eigene programme\c++\prakcg_u01\input.h
+
+1481579742 source:c:\eigene programme\c++\prakcg_u01\light.cpp
+	"light.h"
+
+1480397656 c:\eigene programme\c++\prakcg_u01\light.h
+	"Include/freeglut.h"
+
+1483177561 source:c:\eigene programme\c++\prakcg_u01\wavefront.cpp
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<math.h>
+	"Include/freeglut.h"
+	"wavefront.h"
+
+1482792071 c:\eigene programme\c++\prakcg_u01\wavefront.h
+	"Include/glext.h"
+
+1474874521 c:\eigene programme\c++\prakcg_u01\include\glext.h
+	<windows.h>
+	<stddef.h>
+
+1485854670 source:c:\eigene programme\c++\prakcg_u01\window.cpp
+	"window.h"
+	"wavefront.h"
+	"input.h"
+
+1485854670 c:\eigene programme\c++\prakcg_u01\window.h
+	"Include/freeglut.h"
+
+1491409541 source:c:\eigene programme\c++\prakcg_u01\template_prakcg.cpp
+	<stdlib.h>
+	<math.h>
+	<stdio.h>
+	"Include/freeglut.h"
+	"Include/glext.h"
+	"help.h"
+	"window.h"
+	"wavefront.h"
+	"input.h"
+	"light.h"
+
