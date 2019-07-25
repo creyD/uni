@@ -1,7 +1,7 @@
 import socket
 
 HOST = ""
-PORT = 8085
+PORT = 8080
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(1)
