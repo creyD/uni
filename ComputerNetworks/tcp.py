@@ -1,7 +1,17 @@
 import socket
 
+def recieveLine(conn):
+    data = ''
+    while True:
+        d = conn.recv(1024).decode("utf-8")
+        if d == '\r\n':
+           return data
+        data += d
+    return 0
+
+
 HOST = ""
-PORT = 8080
+PORT = 8081
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
@@ -12,7 +22,7 @@ connection_obj, addr = s.accept()
 history = {}
 
 while True:
-    data = connection_obj.recv(1024)
+    data = recieveLine(connection_obj)
 
     if not data:
         break
