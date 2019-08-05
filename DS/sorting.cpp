@@ -1,15 +1,14 @@
 #include <iostream>
-#include <fstream>
+
+// Include time header for random number generation
 #include <time.h>
+
+// Include chrono for measuring the time
+#include <chrono>
 
 using namespace std;
 
-// Generate List
-int list_length = 10;
-int *the_list = new int[list_length];
-
-// Modes (1 = Bubble Sort, 2 = Insertion Sort)
-int mode = 1;
+bool verbose = false;
 
 // HELPER FUNCTIONS
 // Swaps two values in the list
@@ -72,11 +71,11 @@ void printList(int* list, int length){
 // Populates empty list with unique values
 void genList(int* list, int length){
   srand(time(NULL));
-  for (int i = 0; i < list_length; i++){
-    int var = rand() % list_length;
+  for (int i = 0; i < length; i++){
+    int var = rand() % length;
     while (true){
       if (inList(list, i + 1, var)){
-        var = rand() % list_length;
+        var = rand() % length;
       } else {
         break;
       }
@@ -89,8 +88,8 @@ void genList(int* list, int length){
 // Populates empty list with values (can contain duplicates)
 void genListDup(int* list, int length){
   srand(time(NULL));
-  for (int i = 0; i < list_length; i++){
-    list[i] = rand() % list_length;
+  for (int i = 0; i < length; i++){
+    list[i] = rand() % length;
   }
   return;
 }
@@ -142,23 +141,94 @@ void sort_selection(int* list, int length){
   return;
 }
 
-int main(){
-  // Generate a unique list list
-  genList(the_list, list_length);
+int main(int argc, char* argv[]){
+  if (argc > 2){
+    // Get the second command line argument
+    int list_length = atoi(argv[2]);
 
-  // Print the initial state
-  cout << "Initial State:" << endl;
-  printList(the_list, list_length);
+    // If the list length is invalid --> end the programm
+    if (list_length != 0){
+      // Reserve memory for the list
+      int *the_list = new int[list_length];
 
-  // Sort the list with the selected algoithm
-  if (mode == 1){
-    sort_bubble(the_list, list_length);
-  } else if (mode == 2){
-    sort_selection(the_list, list_length);
+      // Check if a population mode is provided, if not use default generation
+      int gen_mode = 0;
+      if (argc > 3){
+        gen_mode = atoi(argv[3]);
+      }
+
+      // Populate the list with values according to the population mode
+      switch (gen_mode){
+        case 1:
+          genList(the_list, list_length);
+          break;
+        case 2:
+          cout << "Generating sorted list." << endl;
+          genListGood(the_list, list_length);
+          break;
+        case 3:
+          cout << "Generating inversly sorted list." << endl;
+          genListBad(the_list, list_length);
+          break;
+        case 4:
+          cout << "Generating list with duplicate values." << endl;
+          genListDup(the_list, list_length);
+          break;
+        default:
+          genList(the_list, list_length);
+          break;
+      }
+
+      // Print the initial state
+      if (verbose){
+        cout << "Initial State:" << endl;
+        printList(the_list, list_length);
+      }
+
+      cout << "Starting sorting..." << endl;
+
+      // Sort the list with the selected algoithm
+      auto start = chrono::high_resolution_clock::now();
+      switch (atoi(argv[1])) {
+        case 1:
+          cout << "Bubble Sort selected." << endl;
+          sort_bubble(the_list, list_length);
+          break;
+        case 2:
+          cout << "Selection Sort selected." << endl;
+          sort_selection(the_list, list_length);
+          break;
+        default:
+          cout << "Invalid algorithm selection (first command line parameter)." << endl;
+          break;
+      }
+
+      // Clock time
+      auto finish = chrono::high_resolution_clock::now();
+
+      cout << "Finished sorting..." << endl;
+
+      // Calculate time
+      auto duration = chrono::duration_cast<chrono::microseconds>(finish - start).count();
+      if (duration > 1000000){
+        cout << "Time: " << duration / 1000000 << " s" << endl;
+      } else if (duration > 1000){
+        cout << "Time: " << duration / 1000 << " ms" << endl;
+      } else {
+        cout << "Time: " << duration << " microseconds" << endl;
+      }
+
+      // Print the final state of the list
+      if (verbose){
+        cout << "Final State:" << endl;
+        printList(the_list, list_length);
+      }
+    }
+    else {
+      cout << "List size invalid (second command line parameter)." << endl;
+    }
+  } else {
+    cout << "Not enough command line parameters provided." << endl;
   }
-
-  // Print the final state of the list
-  cout << "Final State:" << endl;
-  printList(the_list, list_length);
   return 0;
 }
