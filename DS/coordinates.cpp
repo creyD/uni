@@ -91,6 +91,18 @@ public:
     z = point2.z;
     return;
   }
+
+  void operator+=(Coordinate point2){
+    x += point2.x;
+    y += point2.y;
+    z += point2.z;
+    return;
+  }
+
+  Coordinate* operator+(Coordinate point2){
+    Coordinate* result = new Coordinate(x + point2.x, y + point2.y, z + point2.z);
+    return result;
+  }
 };
 
 int main(){
@@ -98,14 +110,17 @@ int main(){
   Coordinate* test1 = new Coordinate();
   (*test1).print();
   Coordinate* test2 = new Coordinate(5,1,2);
-  (*test1) = (*test2);
-  (*test1).print();
+  (*test1) += (*test2);
+  Coordinate* test3 = (*test1) + (*test2);
+  (*test3).print();
   cout << (*test1).distance(*test2) << endl;
+
   if (*test1 == *test2){
     cout << "Yay" << endl;
   } else {
     cout << "Nope" << endl;
   }
+
   delete test1;
   delete test2;
   return 0;
