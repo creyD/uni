@@ -55,5 +55,7 @@ int main(){
   } else {
     cout << "Nope" << endl;
   }
+  delete test1;
+  delete test2;
   return 0;
 }
