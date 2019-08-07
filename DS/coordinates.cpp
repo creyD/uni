@@ -35,4 +35,25 @@ public:
   double distance(Coordinate point2){
     return sqrt(pow(x - point2.x, 2) + pow(y - point2.y, 2) + pow(z - point2.z, 2));
   }
+
+  bool operator==(const Coordinate point2){
+    if (x == point2.x && y == point2.y && z == point2.z){
+      return true;
+    } else {
+      return false;
+    }
+  }
 };
+
+int main(){
+  // Testing the data structure
+  Coordinate* test1 = new Coordinate(5,1,2);
+  Coordinate* test2 = new Coordinate(5,1,2);
+  cout << (*test1).distance(*test2) << endl;
+  if (*test1 == *test2){
+    cout << "Yay" << endl;
+  } else {
+    cout << "Nope" << endl;
+  }
+  return 0;
+}
