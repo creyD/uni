@@ -22,7 +22,7 @@ SELECT DISTINCT preis FROM BUCHUNG, FLUG WHERE klasse=1 AND start_in="London" AN
 -- C
 SELECT flug.fnr, start_in, ziel FROM FLUG, BUCHUNG, PASSAGIER WHERE name LIKE "% Ebert" AND flug.fnr=buchung.fnr AND buchung.panr=buchung.panr;
 -- D
-SELECT maschine.fznr, fztyp.typ, gewschw FROM FZTYP, BESTAND, MASCHINE WHERE gessell_bez="AIR BERLIN" 
+SELECT maschine.fznr, fztyp.typ, gewschw FROM FZTYP, BESTAND, MASCHINE WHERE gessell_bez="AIR BERLIN"
 AND bestand.fznr=maschine.fznr AND fztyp.typ=maschine.typ;
 -- E
 SELECT DISTINCT name, fztyp.typ FROM FLUG, MASCHINE, FZTYP, PILOT WHERE geschw > 870 AND pilot.pinr=flug.pinnr AND maschine.fznr=flug.fznr AND maschine.typ=fztyp.typ;
@@ -38,3 +38,14 @@ SELECT preis FROM BUCHUNG NATURAL JOIN FLUG WHERE klasse=1 AND ziel="Boston" AND
 SELECT fnr, start_in, ziel FROM PASSAGIER NATURAL JOIN BUCHUNG NATURAL JOIN FLUG WHERE name="% Ebert";
 -- D
 SELECT fznr, typ, geschw FROM BESTAND NATURAL JOIN MASCHINE NATURAL JOIN FZTYP WHERE gesell_bez="AIR BERLIN";
+
+-- 4 (19.12.)
+-- A
+SELECT COUNT(DISTINCT 'quali') AS anz FROM PILOT;
+-- B
+SELECT AVG('d_geschw') AS d_geschw FROM FZTYP, MASCHINE, BESTAND WHERE BESTAND.gesell_bez='LUFTHANSA' AND MASCHINE.fznr=BESTAND.fznr AND MASCHINE.typ=FZTYP.typ;
+-- C
+SELECT COUNT(DISTINCT 'panr') FROM BUCHUNG WHERE klasse=1;
+-- D
+SELECT COUNT(*) AS anz FROM PILOT, ANGESTELLT WHERE quali='Chiefpilot' AND gesell_bez='AIR FRANCE' AND ANGESTELLT.pinr=PILOT.pinr;
+-- E
