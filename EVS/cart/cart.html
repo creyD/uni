@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font: 15px normal Arial, sans-serif;
+            color: #000000;
+        }
+        label {
+            width: 5em;
+            display: inline-block;
+        }
+        ul {
+            padding: 0;
+        }
+        form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <ul>
+    </ul>
+    </form>
+    <hr>
+    <img src="cart.gif">
+    <hr>
+    <form method="POST" action="/">
+        <label for="name">Name</label> <input id="name" type="text" name="name" placeholder="Name"><br>
+        <label for="amount">Amount</label> <input id="amount" type="number" name="amount" placeholder="Amount"><br>
+        <input type="hidden" name="action" value="add">
+        <button type="submit">Add entry</button>
+    </form>
+
+    <script>
+      document.querySelector('form').addEventListener('submit', addNewEntry);
+
+      function removeEntry(id){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+          if (this.readyState == 4 && this.status == 200){
+            alert(this.response);
+          }
+        }
+        xhr.open('DELETE', '/cart/' + id, true);
+        xhr.send();
+        console.log("askhdkjahdfss");
+        document.getElementById('item_' + id).remove();
+
+      }
+
+      function addItem(item_string){
+        var new_entry = document.createElement('li');
+        new_entry.innerHTML = item_string.amount + 'X' + item_string.name;
+        new_entry.id = 'item_' + item_string.id;
+
+        var new_button = document.createElement('button');
+        new_button.innerHTML = 'DELETE';
+        new_button.addEventListener('click', function(){removeEntry(item_string.id)});
+        new_entry.appendChild(new_button);
+
+        var item_list = document.getElementsByTagName('ul')[0];
+        item_list.appendChild(new_entry);
+      }
+
+      function addNewEntry(event){
+        event.preventDefault();
+        var name = document.getElementById('name').value;
+        var number = document.getElementById('amount').value;
+
+        var json_entry = {'name': name, 'amount': number};
+        var xhr = new XMLHttpRequest();
+
+        xhr.responseType = 'json';
+
+        xhr.onreadystatechange = function(){
+          if (this.readyState == 4 && this.status == 200){
+            addItem(this.response);
+          }
+        }
+
+        xhr.open('POST', '/cart', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(json_entry));
+      }
+    </script>
+</body>
+</html>
