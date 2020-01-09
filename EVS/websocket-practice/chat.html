@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html class="gr__bildungsportal_sachsen_de">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>WebSocket Client</title>
+    <style>
+      #output {
+        border: solid 1px #000;
+      }
+    </style>
+  </head>
+  <body data-gr-c-s-loaded="true" cz-shortcut-listen="true">
+    <form id="form">
+      <input type="text" id="message" />
+      <a onclick="sendMessage()">Send</a>
+    </form>
+
+    <hr />
+    <div id="output"></div>
+
+    <script type="text/javascript">
+      var inputBox = document.getElementById("message");
+      var output = document.getElementById("output");
+      var form = document.getElementById("form");
+
+      function sendMessage() {
+        s.send(inputBox.value);
+      }
+
+      try {
+        var host = "ws://localhost:3000/stuff";
+        console.log("Host:", host);
+
+        var s = new WebSocket(host);
+
+        s.onopen = function(e) {
+          console.log("Websocket is now open");
+        };
+
+        s.onclose = function(e) {
+          console.log("Websocket is now closed");
+        };
+
+        s.onmessage = function(e) {
+          console.log("Message:", e.data);
+          var new_ding = document.createElement("p");
+          new_ding.innerHTML = e.data;
+          var parent = document.getElementById("output");
+          parent.appendChild(new_ding);
+        };
+
+        s.onerror = function(e) {
+          console.log("Socket error:", e);
+        };
+      } catch (ex) {
+        console.log("Socket exception:", ex);
+      }
+
+      //Send the data
+    </script>
+  </body>
+</html>
