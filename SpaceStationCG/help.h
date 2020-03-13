@@ -1,8 +1,6 @@
 #ifndef HELP_H
 #define HELP_H
-
-
-// *** Help-Module, PrakCG Template
+// Help-Module
 
 #ifdef __EXPORT_HELP
 
@@ -57,7 +55,6 @@ const char *spalte2[] =
 #define MAX(a,b) ((a) > (b))? (a) : (b)
 #endif
 
-
 class cg_help
 {
 public:
@@ -85,6 +82,5 @@ private:
 	static void printTextShadow ( float x, float y, const char *text, float r, float g, float b, void *font = GLUT_BITMAP_HELVETICA_18 );
 	static void printFps ( float x, float y, void *font = GLUT_BITMAP_HELVETICA_18 );
 };
-
 
 #endif	// HELP_H

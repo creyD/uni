@@ -1,11 +1,6 @@
 #ifndef LIGHT_H
 #define LIGHT_H
-
-
-
 #include "Include/freeglut.h"
-
-
 
 /////////////////////////////////////////////////////////////////////////////////
 //	Modellierungsfunktionen
@@ -18,8 +13,6 @@ void SetLightColors ( GLenum lightid, GLfloat amb[4], GLfloat diff[4], GLfloat s
 
 // Lichtquellen setzen
 void SetLights ();
-
-
 
 class cg_light
 {

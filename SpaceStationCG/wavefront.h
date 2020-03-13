@@ -1,10 +1,6 @@
 // Wavefront Loader
-// PrakCG
-
-
 #ifndef WAVEFRONT_H
 #define WAVEFRONT_H
-
 
 #ifndef __EXT
 #define __EXT
@@ -92,8 +88,6 @@ private:
 
 	bool readClusterVertex( char **r_line, int *p, int *t, int *n );
 };
-
-
 
 #endif // __EXT
 

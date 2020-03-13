@@ -1,8 +1,6 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-
-
 // von GLUT benoetigte Callback-Funktionen
 void KeyboardDownFunc ( unsigned char key, int x, int y );	// Tastendruck
 void KeyboardUpFunc ( unsigned char key, int x, int y );	// Taste loslassen
@@ -10,8 +8,6 @@ void SpecialKeyboardFunc ( int key, int x, int y );			// Sonderzeichen
 void SpecialKeyboardUpFunc ( int key, int x, int y );		// Sonderzeichen loslassen
 void MouseFunc ( int button, int state, int x, int y );		// Maustasten
 void MouseMove ( int x, int y );							// Mausbewegung
-
-
 
 class cg_key
 {
@@ -44,7 +40,6 @@ private:
 	static char specialKeys[31];
 };
 
-
 class cg_mouse
 {
 public:
@@ -70,7 +65,5 @@ private:
 	static char buttons[3];	// 0 - links, 1 - mitte, 2 - rechts
 	static int pos[4];	// 0,1 - aktuelle Position, 2,3 - letzte Position
 };
-
-
 
 #endif // INPUT_H
