@@ -7,16 +7,13 @@
 #include "Include/freeglut.h"
 #include "help.h"
 
-
-
 bool cg_help::showhelp = false, cg_help::showfps = true, cg_help::wireframe = false, cg_help::koordsystem = true;
 int cg_help::frames = 0;
 float cg_help::fps = 0.0f, cg_help::bg_size = 0.8f, cg_help::shadow = 0.003f;
-const char * cg_help::title = "Raumstation - Conrad Grosser 2019 - TU Chemnitz";
-const char * cg_help::footer = "Raumstation - Conrad Grosser 2019 - Projekt Computergrafik 2019 - TU Chemnitz";
+const char * cg_help::title = "Raumstation - Conrad Grosser 2020 - TU Chemnitz";
+const char * cg_help::footer = "Raumstation - Conrad Grosser 2020 - Projekt Computergrafik 2020 - TU Chemnitz";
 extern const char *spalte1[];
 extern const char *spalte2[];
-
 
 void  cg_help::toggle ()
 {
@@ -66,15 +63,6 @@ void cg_help::drawBackground ()
 	glDisable( GL_BLEND );
 }
 
-/*
-GLUT_BITMAP_8_BY_13
-GLUT_BITMAP_9_BY_15
-GLUT_BITMAP_TIMES_ROMAN_10
-GLUT_BITMAP_TIMES_ROMAN_24
-GLUT_BITMAP_HELVETICA_10
-GLUT_BITMAP_HELVETICA_12
-GLUT_BITMAP_HELVETICA_18
-*/
 void cg_help::printText ( float x, float y, const char *text, void *font )
 {
 	glRasterPos2f( x, y );
@@ -102,12 +90,12 @@ void cg_help::printFps ( float x, float y, void *font )
 	time_t now;
 	time( &now );
 
-	//wenn ueber eine Sekunde vergangen ist
+	// Wenn mehr als 1 Sekunde vergangen
 	if( now - lastTime >= 1 )
 	{
-		fps = ( ( float )frames ) / ( float )( now - lastTime );	//fps neu ausrechnen
-		lastTime = now;	//alte Zeit speichern
-		frames = 0;					//frame-zaehler zuruecksetzen
+		fps = ( ( float )frames ) / ( float )( now - lastTime );	// FPS berechnen
+		lastTime = now;	// Neue Zeit als Referenz speichern
+		frames = 0; // Frame Zaehler zurueksetzen
 	}
 	char fpstext[20];
 	sprintf_s ( fpstext, "FPS = %.1f", fps );
@@ -116,7 +104,6 @@ void cg_help::printFps ( float x, float y, void *font )
 
 void cg_help::draw ()
 {
-
 	++frames;
 	if ( !showhelp && !showfps ) return;
 
@@ -139,11 +126,11 @@ void cg_help::draw ()
 
 	if ( showhelp )
 	{
-		// hintergrund
+		// Zeichne Hintergrund
 		drawBackground();
-		// title
+		// Zeichne Titel
 		printTextShadow ( -0.6f, 0.7f, title, 1.0f, 1.0f, 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 );
-		// tasten
+		// Tastenbelegung initialisieren
 		glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 		float posy = 0.5f;
 		int i = 0;
@@ -162,15 +149,14 @@ void cg_help::draw ()
 			++i;
 		}
 	}
-	// fps
+	// FPS Counter aktivieren
 	glColor4f( 1.0f, 1.0f, 0.0f, 1.0f );
 	printFps ( -0.78f, -0.78f );
-	// footer
+	// Zeichne Footer
 	printText( -1.0f, -1.0f, footer );
-
-	// ruecksetzen
+	// Tiefentest aktivieren
 	glEnable ( GL_DEPTH_TEST );
-	//reset matrices
+	// Matrix Modi zurueksetzen
 	glMatrixMode( GL_PROJECTION );
 	glPopMatrix();
 	glMatrixMode( GL_MODELVIEW );
@@ -182,13 +168,8 @@ void cg_help::draw ()
 //
 //	Prozedur fuer Zeichnen eines Koordinatensystemes
 //
-void cg_help::drawKoordsystem ( GLfloat xmin, GLfloat xmax, GLfloat ymin, GLfloat ymax,
-								GLfloat zmin, GLfloat zmax )
-{
-
-	if ( koordsystem )
-	{
-
+void cg_help::drawKoordsystem ( GLfloat xmin, GLfloat xmax, GLfloat ymin, GLfloat ymax, GLfloat zmin, GLfloat zmax ){
+	if ( koordsystem ) {
 		GLfloat i;
 		GLfloat akt_color[4];
 		GLint akt_mode;
@@ -233,7 +214,6 @@ void cg_help::drawKoordsystem ( GLfloat xmin, GLfloat xmax, GLfloat ymin, GLfloa
 			glVertex3f( -0.15, 0.0, i );
 			glVertex3f( 0.15, 0.0, i );
 		}
-
 		glEnd();
 
 		// Ende Linienpaare
@@ -270,7 +250,6 @@ void cg_help::drawKoordsystem ( GLfloat xmin, GLfloat xmax, GLfloat ymin, GLfloa
 		gluDeleteQuadric( spitze );
 
 		if ( !cull_mode ) glDisable( GL_CULL_FACE );
-
 	}
 }
 

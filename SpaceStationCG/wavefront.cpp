@@ -6,12 +6,7 @@
 #define EXPORT_EXT
 #include "wavefront.h"
 
-
-
 /* wavefront */
-
-
-
 bool initExtensions ()
 {
 	glGenBuffers = ( PFNGLGENBUFFERSARBPROC ) glutGetProcAddress( "glGenBuffers" );
@@ -112,7 +107,6 @@ bool cg_object3D::readClusterVertex( char **r_line, int *p, int *t, int *n )
 	if ( sscanf( h, "%i", &p[0] ) == 1 )  							// Vertex-Index wurde gelesen, es folgt ein Slash oder ein Blank bzw. das Zeilenende
 	{
 		// Wenn ein Slash folgt, dann haben wir einen Vertex-Cluster
-
 		while ( h[0] != 0 && h[0] != '/' && h[0] != ' ' ) h++;		// Vorsetzen bis Zeilenende, Slash oder Leerzeichen
 
 		switch ( h[0] )

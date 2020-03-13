@@ -2,9 +2,6 @@
 #include "wavefront.h"
 #include "input.h"
 
-
-
-
 double cg_globState::screenSize[] = {0};
 GLenum cg_globState::drawMode = GL_FILL;
 bool cg_globState::lightMode = false;
@@ -13,8 +10,6 @@ bool cg_globState::cullMode = false;
 int cg_globState::cameraHelper[] = {0};
 float cg_globState::cameraPos[] = {0,0};
 int cg_globState::useVBOs = 0;
-
-
 
 void init ( int argc, char **argv )
 {

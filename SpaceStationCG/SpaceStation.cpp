@@ -13,11 +13,9 @@
 #include "input.h"
 #include "light.h"
 
-
-
 void setCamera();		// Kamera platzieren, siehe Maus-Callbacks
 void drawScene();		// Zeichnet die Szene im Weltkoordinatensystem
-void loadObjects();		// Lädt externe Objektdateien
+void loadObjects();		// Laedt externe Objektdateien
 
 // Globale Variablen zur Steuerung der Raumstation
 float GLOBAL_STATIONPOS[3] = { 0, 0, 0 };
@@ -36,7 +34,7 @@ int GLOBAL_CAM_MODE = 0;
 // FPS Mode (false = Absolute Geschwindigkeit, true = Relative Geschwindigkeit)
 int FPS_MODE = false;
 
-// Slices und Stacks global für alle Zylinder und Kugelformen definieren
+// Slices und Stacks global fuer alle Zylinder und Kugelformen definieren
 float SLICES = 100;
 float STACKS = 100;
 
@@ -54,10 +52,8 @@ enum {
 	SOLARPANEL = 0
 };
 
-void loadObjects()
-{
-
-	// alle Objekte Laden, wenn der Pfad verfügbar ist
+void loadObjects() {
+	// alle Objekte Laden, wenn der Pfad verfuegbar ist
 	for (int i = 0; i < num_objects; i++)
 		if (strlen(objects_paths[i]) > 0)
 		{
@@ -67,15 +63,14 @@ void loadObjects()
 			objects[i].load(filename, true);
 		}
 
-	// Materialeigenschaften für Solarpanele setzen
+	// Materialeigenschaften fuer Solarpanele setzen
 	objects[SOLARPANEL].setMaterial(0.1, 0.1, 0.8, 0.9, 0.5, 80, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 //	Kamerafunktion
 /////////////////////////////////////////////////////////////////////////////////
-void setCamera()
-{
+void setCamera() {
 	cg_mouse mouse;
 	// Ansichtstransformationen setzen,
 	// SetCamera() zum Beginn der Zeichenfunktion aufrufen
@@ -120,16 +115,13 @@ void setCamera()
 	}
 }
 
-
-
 /////////////////////////////////////////////////////////////////////////////////
 //	Anfang des OpenGL Programmes
 /////////////////////////////////////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	init(argc, argv);
 
-	// Lädt die externen Objektdateien und Texturen
+	// Laedt die externen Objektdateien und Texturen
 	loadObjects();
 
 	// Die Hauptschleife starten
@@ -137,17 +129,14 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-
-
-void displayFunc()
-{
+void displayFunc() {
 	// Hilfe-Instanzen
 	cg_help help;
 	cg_globState globState;
 	cg_key key;
 
 	// Tastatur abfragen
-	// Achtung: einmaliges Betätigen funktioniert so nur mit glutIgnoreKeyRepeat(true) (siehe main())
+	// Achtung: einmaliges Betaetigen funktioniert so nur mit glutIgnoreKeyRepeat(true) (siehe main)
 	if (key.keyState(27))
 	{
 		exit(0); // Escape -> Programm beenden
@@ -243,9 +232,7 @@ void displayFunc()
 		}
 	}
 
-
 	// Szene zeichnen: CLEAR, SETCAMERA, DRAW_SCENE
-
 	// Back-Buffer neu initialisieren
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
@@ -266,7 +253,7 @@ void displayFunc()
 	if (globState.cullMode) glEnable(GL_CULL_FACE);
 	else glDisable(GL_CULL_FACE);
 
-	// Farbmodus oder Beleuchtungsmodus ?
+	// Auswahl Farbmodus oder Beleuchtungsmodus
 	if (globState.lightMode == GL_TRUE) // Beleuchtung aktivieren
 	{
 		float m_amb[4] = { 0.2, 0.2, 0.2, 1.0 };
@@ -280,17 +267,13 @@ void displayFunc()
 		SetLights();
 
 		glEnable(GL_LIGHTING);
-	}
-	else   // Zeichnen im Farbmodus
-	{
+	} else {  // Zeichnen im Farbmodus
 		glDisable(GL_LIGHTING);
 		glColor4f(0.2, 0.2, 0.6, 1.0);
 	}
 
-
 	// Geometrie zeichnen /////////////////!!!!!!!!!!!!!!!!!!!!!!!!///////////////////////
 	drawScene();
-
 
 	// Hilfetext zeichnen
 	help.draw();
@@ -303,8 +286,7 @@ void displayFunc()
 }
 
 
-void solarPanel()
-{
+void solarPanel() {
 	glPushMatrix();
 		glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
@@ -315,8 +297,7 @@ void solarPanel()
 }
 
 
-void solarConnector()
-{
+void solarConnector() {
 	glPushMatrix();
 			glColor3f(0.8, 0.8, 0.8);
 			glScalef(0.25, 0.25, 3);
@@ -326,8 +307,7 @@ void solarConnector()
 
 
 // Zeichnet einen Solararm mit zwei verbundenen Panelen mit der gegebenen Rotation
-void solarArm(float x, float y, float z, float rotation)
-{
+void solarArm(float x, float y, float z, float rotation) {
 	glPushMatrix();
 		glColor3f(0.169, 0.169, 0.169);
 		glTranslatef(x, y - 0.375, z);
@@ -353,9 +333,8 @@ void solarArm(float x, float y, float z, float rotation)
 	glPopMatrix();
 }
 
-
-void sensorArrayKlein(float x, float y, float z, float skalierung_x, float skalierung_y, float skalierung_z, int zacken)
-{
+// Zeichnet das kleine Sensorarray
+void sensorArrayKlein(float x, float y, float z, float skalierung_x, float skalierung_y, float skalierung_z, int zacken) {
 	glPushMatrix();
 		glTranslatef(x, y, z);
 		glScalef(skalierung_x, skalierung_y, skalierung_z);
@@ -382,11 +361,10 @@ void sensorArrayKlein(float x, float y, float z, float skalierung_x, float skali
 	glPopMatrix();
 }
 
-
-void sensorArrayGross(float x, float y, float z, float general_rotation, float sensor_rotation, float skalierung)
-{
+// Zeichnet das grosse Sensorarray
+void sensorArrayGross(float x, float y, float z, float general_rotation, float sensor_rotation, float skalierung) {
 	glPushMatrix();
-		// Verschiebe das Sensorarray zur benötigten Stelle
+		// Verschiebe das Sensorarray zur benoetigten Stelle
 		glTranslatef(x, y, z);
 		// Setze die Skalierung des Objekts
 		glScalef(skalierung, skalierung, skalierung);
@@ -459,13 +437,12 @@ void sensorArrayGross(float x, float y, float z, float general_rotation, float s
 }
 
 
-void wing(float x, float y, float z, float rotation, float skalierung)
-{
+void wing(float x, float y, float z, float rotation, float skalierung) {
 	glPushMatrix();
 		// Gegebene Skalierung anwenden
 		glScalef(skalierung, skalierung, skalierung);
 
-		// Träger
+		// Traeger
 		glPushMatrix();
 			glColor3f(0.211, 0.211, 0.211);
 			glTranslatef(x + 1.5, y, z);
@@ -489,7 +466,7 @@ void wing(float x, float y, float z, float rotation, float skalierung)
 		}
 		glPopMatrix();
 
-		// Verbindungsstück zur Basis der Station
+		// Verbindungsstueck zur Basis der Station
 		glPushMatrix();
 			glColor3f(0.123, 0.123, 0.211);
 			glTranslatef(x + 7.5, y, z);
@@ -504,10 +481,9 @@ void wing(float x, float y, float z, float rotation, float skalierung)
 }
 
 
-// Hauptkörper der Raumstation
-void base(float x, float y, float z)
-{
-	// Grundkörper der Station
+// Hauptkoerper der Raumstation
+void base(float x, float y, float z) {
+	// Grundkoerper der Station
 	glPushMatrix();
 		glColor3f(0.134, 0.211, 0.211);
 		glTranslatef(x, y, z);
@@ -529,10 +505,10 @@ void base(float x, float y, float z)
 void base2() {
 	glPushMatrix();
 		glEnable(GL_CULL_FACE);
-			// Nur Außenseite des Zylinders rendern
+			// Nur Aussenseite des Zylinders rendern
 			glCullFace(GL_BACK);
 			glTranslatef(0, -1.5, -2.5);
-			// Verbindungsstück zwischen Base und Base 2 
+			// Verbindungsstueck zwischen Base und Base 2 
 			glutSolidCone(3, 2, SLICES, STACKS);
 			glRotatef(180, 1, 0, 0);
 			// Base 2 Hauptteil
@@ -619,7 +595,7 @@ void drawLights() {
 		float offset_y = 5;
 		float offset_z = 5;
 
-		// Offset für jede Lichtquelle bestimmen: In jedem Quadranten eine Lichtquelle
+		// Offset pro Lichtquelle bestimmen: In jedem Quadranten eine Lichtquelle
 		switch (i) {
 			case 0:
 				break;
@@ -664,8 +640,7 @@ void drawLights() {
 	}
 }
 
-void drawScene()
-{	
+void drawScene() {	
 	cg_globState globState;
 	// Zeichnet die Szene 1x im Weltkoordinatensystem
 	// Festlegen der Geschwindigkeit der Erdrotation
@@ -679,7 +654,7 @@ void drawScene()
 		GLOBAL_STATIONPOS[1] = GLOBAL_STATIONDISTANCE * cos(GLOBAL_EARTHROTATION * GLOBAL_STATIONSPEED);
 	}
 	else {
-		// 60 ist der Faktor um den die normale Geschwindigkeit multipliziert wird, um möglichst gleiche Geschwindigkeiten zwischen den Modi zu erzielen
+		// 60 ist der Faktor um den die normale Geschwindigkeit multipliziert wird, um moeglichst gleiche Geschwindigkeiten zwischen den Modi zu erzielen
 		GLOBAL_STATIONPOS[0] = GLOBAL_STATIONDISTANCE * sin(GLOBAL_EARTHROTATION * ((GLOBAL_STATIONSPEED * 60) / (MAX(1, cg_help::getFps()))));
 		GLOBAL_STATIONPOS[1] = GLOBAL_STATIONDISTANCE * cos(GLOBAL_EARTHROTATION * ((GLOBAL_STATIONSPEED * 60) / (MAX(1, cg_help::getFps()))));
 		GLOBAL_STATIONPOS[2] = 0;
